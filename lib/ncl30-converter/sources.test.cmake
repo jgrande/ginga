@@ -1,0 +1,10 @@
+SET( ${PROJECT_NAME}_TEST_HEADER_FILES
+)
+
+SET( ${PROJECT_NAME}_TEST_SOURCE_FILES
+	${${PROJECT_NAME}_TEST_HEADER_FILES}
+	test/src/main.cpp
+	test/src/parser.cpp
+)
+
+

@@ -1,0 +1,8 @@
+/* config.h template for cmake */
+#define ${PROJECT_NAME_UPPERCASE}_VERSION ${VERSION}
+
+//	FB
+#define FB_DEVICE          ${FB_DEVICE}
+
+//	Data prefix
+#define DATA_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}"

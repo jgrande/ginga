@@ -1,0 +1,7 @@
+DEF_OPTIONS(IO ev DEFAULT ev ON)
+DEF_OPTIONS(LOG log DEFAULT log ON)
+
+ADD_BOOST_COMPONENTS( system filesystem thread )
+
+find_package( XercesC REQUIRED )
+ADD_DEPENDENTS( XERCESC )

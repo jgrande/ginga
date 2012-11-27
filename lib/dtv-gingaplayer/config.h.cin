@@ -1,0 +1,11 @@
+/* config.h template for cmake */
+#define ${PROJECT_NAME_UPPERCASE}_VERSION ${VERSION}
+
+/* Prefix of the data path*/
+#define DATA_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}"
+
+/* Defines the PATH of the Connector socket */
+#define GINGA_CONNECTOR_SOCKET ${GINGA_CONNECTOR_SOCKET}
+
+#cmakedefine TEST_GINGAPLAYER_TCP ${TEST_GINGAPLAYER_TCP}
+

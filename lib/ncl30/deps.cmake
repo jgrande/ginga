@@ -1,0 +1,3 @@
+ADD_INTERNAL_COMPONENTS( gingaplayer )
+
+ADD_BOOST_COMPONENTS( math_tr1 )

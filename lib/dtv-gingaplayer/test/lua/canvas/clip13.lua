@@ -1,0 +1,10 @@
+-- Testea #attrCrop  devuelva los valores de x,y, width y height seteados en el canvas 
+local subCanvas = canvas:new("resources/lifia.png")
+subCanvas:attrClip(0,0,100,100)
+local x,y,anchura,altura = subCanvas:attrClip()
+canvas:attrColor("red")
+canvas:drawText(0,0,"Coordenada x de la región de clip: "..x.." (deberia ser 0)")
+canvas:drawText(0,10,"Coordenada y de la región de clip: "..y.." (deberia ser 0)")
+canvas:drawText(0,20,"Anchura de la región de clip: "..anchura.." (deberia ser 100)")
+canvas:drawText(0,30,"Altura de la región de clip: "..altura.." (deberia ser 100)")
+canvas:flush()

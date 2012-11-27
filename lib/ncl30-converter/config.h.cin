@@ -1,0 +1,2 @@
+/* config.h template for cmake */
+#define ${PROJECT_NAME_UPPERCASE_ESCAPED}_VERSION ${VERSION}

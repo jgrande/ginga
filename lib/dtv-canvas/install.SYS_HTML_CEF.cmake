@@ -1,0 +1,4 @@
+if(WIN32)
+	POST_BUILD_INSTALL_DIRECTORY("bin" "${EXTERNALS_PATH}/bin/locales")
+	POST_BUILD_INSTALL_FILES("bin" "${EXTERNALS_PATH}/bin/chrome.pak")
+endif(WIN32)

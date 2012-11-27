@@ -1,0 +1,8 @@
+/* config.h template for cmake */
+#define ${PROJECT_NAME_UPPERCASE_ESCAPED}_VERSION "${VERSION}"
+
+/* Prefix of the configuration path*/
+#define CONFIG_PREFIX_PATH "${CMAKE_CONFIG_INSTALL_PREFIX}"
+
+/* Prefix of the data path*/
+#define DATA_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}"
