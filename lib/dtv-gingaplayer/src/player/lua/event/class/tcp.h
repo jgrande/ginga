@@ -8,7 +8,7 @@ namespace tcp {
 
 //	Event class methods
 int postEvent( lua_State *st, bool isOut, int eventPos );
-void onDataReceived( Module *module, const std::string &val, int socketID);
+void onDataReceived( lua_State *st, Module *module, const std::string &val, int socketID);
 
 }
 }

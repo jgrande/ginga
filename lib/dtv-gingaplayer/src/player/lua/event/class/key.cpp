@@ -48,10 +48,10 @@ int postEvent( lua_State *st, bool isOut, int eventPos ) {
 			}
 
 			if (isOut) {
-				module->dispatchKey( key, type == release );
+				module->dispatchKey( st, key, type == release );
 			}
 			else {				
-				dispatchKey( module, key, type == release );
+				dispatchKey( st, module, key, type == release );
 			}
 
 		} else {
@@ -66,11 +66,11 @@ int postEvent( lua_State *st, bool isOut, int eventPos ) {
 	return 1;
 }
 
-void dispatchKey( Module *module, util::key::type key, bool isUp ) {
+void dispatchKey( lua_State *st, Module *module, util::key::type key, bool isUp ) {
 	EventImpl event;
-	event["class"] = "key";
-	event["type"] = isUp ? "release" : "press";
-	event["key"] = util::key::getKeyName( key );
+	event["class"] = EventData(st, "key");
+	event["type"] = EventData(st, isUp ? "release" : "press");
+	event["key"] = EventData(st, util::key::getKeyName( key ));
 	module->dispatchIn( &event );
 }
 

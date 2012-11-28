@@ -30,10 +30,10 @@ int postEvent( lua_State * st, bool /*isOut*/, int eventPos ) {
 		}
 
 		EventImpl event;
-		event["class"] = "tcp";
-		event["type"] =	"connect";
-		event["host"] = host;
-		event["port"] = port;
+		event["class"] = EventData(st, "tcp");
+		event["type"] =	EventData(st, "connect");
+		event["host"] = EventData(st, host);
+		event["port"] = EventData(st, port);
 
 		util::id::Ident id;
 		
@@ -45,9 +45,9 @@ int postEvent( lua_State * st, bool /*isOut*/, int eventPos ) {
 		}
 		
 		if (util::id::isValid(id)) {
-			event["connection"] = boost::lexical_cast<std::string>(id->getID());
+			event["connection"] = EventData(st, boost::lexical_cast<std::string>(id->getID()));
 		} else {
-			event["error"] = "Connection failed";
+			event["error"] = EventData(st, "Connection failed");
 		}
 
 		module->dispatchIn( &event );
@@ -100,12 +100,12 @@ int postEvent( lua_State * st, bool /*isOut*/, int eventPos ) {
 	return 1;
 }
 
-void onDataReceived( Module *module, const std::string &val, int socketID) {
+void onDataReceived( lua_State *st, Module *module, const std::string &val, int socketID) {
 	EventImpl event;
-	event["class"] = "tcp";
-	event["type"] =	"data";
-	event["connection"] = boost::lexical_cast<std::string>(socketID);
-	event["value"] = val;
+	event["class"] = EventData(st, "tcp");
+	event["type"] =	EventData(st, "data");
+	event["connection"] = EventData(st, boost::lexical_cast<std::string>(socketID));
+	event["value"] = EventData(st, val);
 	module->dispatchIn( &event );
 }
 

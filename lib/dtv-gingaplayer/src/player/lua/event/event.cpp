@@ -58,6 +58,45 @@ private:
 	FindSocketByID &operator=( FindSocketByID & /*ft*/ ) { return *this; }
 };
 
+EventData::EventData() : _st(NULL), _ref(0) {}
+
+EventData::EventData(lua_State *st, const std::string& str) {
+    lua_pushstring(st, str.c_str());
+    this->_st = st;
+    this->_ref = luaL_ref(st, LUA_REGISTRYINDEX);
+}
+
+EventData::EventData(lua_State *st, const char* str) {
+    lua_pushstring(st, str);
+    this->_st = st;
+    this->_ref = luaL_ref(st, LUA_REGISTRYINDEX);
+}
+
+EventData::EventData(lua_State *st) {
+    this->_st = st;
+    this->_ref = luaL_ref(st, LUA_REGISTRYINDEX);
+}
+
+void EventData::push() const {
+    lua_rawgeti( this->_st, LUA_REGISTRYINDEX, this->_ref);
+}
+
+void EventData::unref() const {
+    luaL_unref(this->_st, LUA_REGISTRYINDEX, this->_ref);
+}
+
+EventData::operator std::string() const {
+    this->push();
+    std::string str = lua_tostring(this->_st, -1);
+    lua_pop(this->_st, 1);
+    return str;
+}
+
+bool EventData::operator ==(const char* thatStr) const {
+    std::string thisStr = *this;
+    return thisStr == thatStr;
+}
+
 class Handler {
 public:
 	Handler( lua_State *lua, int ref, const std::string &className="any" )
@@ -82,7 +121,7 @@ public:
 
 			lua_newtable(_lua);
 			BOOST_FOREACH( const EventImpl::value_type &value, *table ) {
-				lua_pushstring( _lua, value.second.c_str() );
+                value.second.push();
 				lua_setfield( _lua, -2, value.first.c_str() );
 			}
 
@@ -307,16 +346,16 @@ void Module::setInputEventCallback( const InputCallback &callback ) {
 }
 
 //	LuaPlayer methods
-void Module::dispatchKey( util::key::type key, bool isUp ) {
-	key::dispatchKey( this, key, isUp );
+void Module::dispatchKey( lua_State *st, util::key::type key, bool isUp ) {
+	key::dispatchKey( st, this, key, isUp );
 }
 
-void Module::dispatchPresentation( evtAction::type action, const std::string &label ) {
-	ncl::dispatchPresentation( this, action, label );
+void Module::dispatchPresentation( lua_State *st, evtAction::type action, const std::string &label ) {
+	ncl::dispatchPresentation( st, this, action, label );
 }
 
-void Module::dispatchAttribution( const std::string &name, evtAction::type action, const std::string &value ) {
-	ncl::dispatchAttribution( this, name, action, value );
+void Module::dispatchAttribution( lua_State *st, const std::string &name, evtAction::type action, const std::string &value ) {
+	ncl::dispatchAttribution( st, this, name, action, value );
 }
 
 //	Dispatch methods
@@ -330,6 +369,10 @@ void Module::dispatchIn( EventImpl *table ) {
 	if (!_inCallback.empty()) {
 		_inCallback( table );
 	}
+
+    BOOST_FOREACH( const EventImpl::value_type &value, *table ) {
+        value.second.unref();
+    }
 }
 
 void Module::dispatchOut(
@@ -553,7 +596,7 @@ void Module::onDataReceived( util::id::Ident &socketID ) {
 		while (len > 0) {
 			{	//	Notify data
 				std::string tmp( buf.buffer(), len );
-				tcp::onDataReceived( this, tmp, socketID->getID() );
+				tcp::onDataReceived( this->_lua, this, tmp, socketID->getID() );
 			}
 
 			len = sock->recv( buf.buffer(), buf.capacity() );

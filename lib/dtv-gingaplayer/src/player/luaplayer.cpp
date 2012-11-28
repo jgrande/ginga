@@ -212,7 +212,7 @@ void LuaPlayer::setInputEventCallback( const event::InputCallback &callback ) {
 }
 
 void LuaPlayer::onPresentationEvent( player::event::evtAction::type action, const std::string &label/*=""*/ ) {
-	_event->dispatchPresentation( action, label );
+	_event->dispatchPresentation( this->_lua, action, label );
 }
 
 void LuaPlayer::sendAttributionEvent( const AttributionEventData &data ) {
@@ -220,7 +220,7 @@ void LuaPlayer::sendAttributionEvent( const AttributionEventData &data ) {
 }
 
 void LuaPlayer::onAttributionEvent( const std::string &name/*=""*/, const std::string &value/*=""*/ ) {
-	_event->dispatchAttribution( name, event::evtAction::start, value );
+	_event->dispatchAttribution( this->_lua, name, event::evtAction::start, value );
 }
 
 void LuaPlayer::sendKeyEvent( const SelectionEventData &data ) {
@@ -228,7 +228,7 @@ void LuaPlayer::sendKeyEvent( const SelectionEventData &data ) {
 }
 
 void LuaPlayer::onKeyEvent( util::key::type key, bool isUp ) {
-	_event->dispatchKey( key, isUp );
+	_event->dispatchKey( this->_lua, key, isUp );
 }
 
 }

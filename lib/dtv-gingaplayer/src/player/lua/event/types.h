@@ -42,7 +42,8 @@ enum type {
 }
 
 //	Event
-typedef std::map<std::string, std::string> EventImpl;
+class EventData;
+typedef std::map<std::string, EventData> EventImpl;
 
 //	Callbacks
 typedef boost::function<void(

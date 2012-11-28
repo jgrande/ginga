@@ -1,5 +1,6 @@
 #include "../../util.h"
 #include "luaplayer.h"
+#include "../../../../src/player/lua/event/event.h"
 #include "../../../../src/player/luaplayer.h"
 #include "../../../../src/device.h"
 #include "../../../../src/system.h"

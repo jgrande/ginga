@@ -8,7 +8,7 @@ namespace key {
 
 //	Event class methods
 int postEvent( lua_State *st, bool isOut, int eventPos );
-void dispatchKey( Module *module, util::key::type key, bool isUp );
+void dispatchKey( lua_State *st, Module *module, util::key::type key, bool isUp );
 
 }
 }

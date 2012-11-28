@@ -2,6 +2,7 @@
 #include "../event.h"
 #include "../../lua.h"
 #include <canvas/system.h>
+#include <iostream>
 
 namespace player {
 namespace event {
@@ -18,11 +19,7 @@ int postEvent( lua_State *st, bool /*isOut*/, int eventPos ) {
 	lua_pushnil(st);  // First key
 	while (lua_next(st, eventPos) != 0) {
 		const char *key=lua_tostring(st,-2);
-		const char *value=lua_tostring(st,-1);
-		table[key] = value;
-
-		//	Removes 'value'; keeps 'key' for next iteration
-		lua_pop(st, 1);
+		table[key] = EventData(st);
 	}
 
 	//	Dispatch table to user

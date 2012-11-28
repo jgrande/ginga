@@ -22,6 +22,21 @@ class LuaPlayer;
 
 namespace event {
 
+class EventData {
+public:
+    EventData();
+    EventData(lua_State *st, const std::string& str);
+    EventData(lua_State *st, const char* str);
+    EventData(lua_State *st);
+    void push() const;
+    void unref() const;
+    operator std::string() const;
+    bool operator==(const char* str) const;
+private:
+    lua_State *_st;
+    int _ref;
+};
+
 class Handler;
 
 class Module {
@@ -34,9 +49,9 @@ public:
 	void setInputEventCallback( const InputCallback &callback );	
 
 	//	Lua player methods
-	void dispatchKey( util::key::type key, bool isUp );
-	void dispatchPresentation( evtAction::type action, const std::string &label );
-	void dispatchAttribution( const std::string &name, evtAction::type action, const std::string &value );
+	void dispatchKey( lua_State *st, util::key::type key, bool isUp );
+	void dispatchPresentation( lua_State *st, evtAction::type action, const std::string &label );
+	void dispatchAttribution( lua_State *st, const std::string &name, evtAction::type action, const std::string &value );
 
 	//	Dispatch methods
 	void dispatchIn( EventImpl *table );

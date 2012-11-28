@@ -43,7 +43,7 @@ int postEvent( lua_State *st, bool isOut, int eventPos ) {
 			if (isOut){
 				module->dispatchOut( evtType::presentation, action, label, "" );
 			}else{
-				dispatchPresentation( module, action, label );
+				dispatchPresentation( st, module, action, label );
 			}
 
 			break;
@@ -62,7 +62,7 @@ int postEvent( lua_State *st, bool isOut, int eventPos ) {
 			if (isOut){
 				module->dispatchOut( evtType::attribution, action, name, value );
 			}else{
-				dispatchAttribution( module, name, action, value );
+				dispatchAttribution( st, module, name, action, value );
 			}
 
 			break;
@@ -83,22 +83,22 @@ int postEvent( lua_State *st, bool isOut, int eventPos ) {
 	return 1;
 }
 
-void dispatchPresentation( Module *module, evtAction::type action, const std::string &label ) {
+void dispatchPresentation( lua_State *st, Module *module, evtAction::type action, const std::string &label ) {
 	EventImpl event;
-	event["class"] = "ncl";
-	event["type"] = "presentation";
-	event["label"] = label;
-	event["action"] = getActionName( action );
+	event["class"] = EventData(st, "ncl");
+	event["type"] = EventData(st, "presentation");
+	event["label"] = EventData(st, label);
+	event["action"] = EventData(st, getActionName( action ));
 	module->dispatchIn( &event );
 }
 
-void dispatchAttribution( Module *module, const std::string &name, evtAction::type action, const std::string &value ) {
+void dispatchAttribution( lua_State *st, Module *module, const std::string &name, evtAction::type action, const std::string &value ) {
 	EventImpl event;
-	event["class"] = "ncl";
-	event["type"] = "attribution";
-	event["name"] = name;
-	event["action"] = getActionName( action );
-	event["value"] = value;
+	event["class"] = EventData(st, "ncl");
+	event["type"] = EventData(st, "attribution");
+	event["name"] = EventData(st, name);
+	event["action"] = EventData(st, getActionName( action ));
+	event["value"] = EventData(st, value);
 	module->dispatchIn( &event );	
 }	
 
